@@ -17,7 +17,7 @@
 
 (defmacro deftest (name parameters &body body)
   `(defun ,name ,parameters
-     (let ((*test-name* ',name))
+     (let ((*test-name* (append *test-name* (list ',name))))
        ,@body)))
 
 (deftest test-+ ()
@@ -26,20 +26,18 @@
      (= (+ 1 2 3) 6)
      (= (+ -1 -3) -4)))
 
-(defun test-* ()
+(deftest test-* ()
     (check
      (= (* 1 2 3) 6)
      (= (* -1 -3) 3)))
 
-(defun test-arithmetic ()
+(deftest test-arithmetic ()
   (combine-results
     (test-+)
     (test-*)))
 
-(defmacro deftest (name parameters &body body)
-  `(defun ,name ,parameters
-     (let ((*test-name* ',name))
-       ,@body)))
+(deftest test-math ()
+  (test-arithmetic))
 
 (defun report-result (result form)
   (format t "~:[FAIL~;pass~] ...~a: ~a~%" result *test-name* form)
