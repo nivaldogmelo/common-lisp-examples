@@ -30,15 +30,15 @@ cases."
   result)
 
 (deftest test-+ ()
-    (check
-     (= (+ 1 2) 3)
-     (= (+ 1 2 3) 6)
-     (= (+ -1 -3) -4)))
+  (check
+    (= (+ 1 2) 3)
+    (= (+ 1 2 3) 6)
+    (= (+ -1 -3) -4)))
 
 (deftest test-* ()
-    (check
-     (= (* 1 2 3) 6)
-     (= (* -1 -3) 3)))
+  (check
+    (= (* 1 2 3) 6)
+    (= (* -1 -3) 3)))
 
 (deftest test-arithmetic ()
   (combine-results
