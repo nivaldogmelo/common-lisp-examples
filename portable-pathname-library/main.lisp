@@ -61,4 +61,38 @@
     #-(or sbcl cmu lispworks openmcl allegro lisp)
     (error "list-directory not implemented")))
 
+(defun file-exists-p (pathname)
+  #+(or sbcl lispworks openmcl)
+  (probe-file pathname)
 
+  #+(or allegro cmu)
+  (or (probe-file (pathname-as-directory pathname))
+      (probe-file pathname))
+
+  #+clisp
+  (or (ignore-errors
+	(probe-files (pathname-as-file pathname)))
+      (ignore-errors
+	(let ((directory-form (pathname-as-directory pathname)))
+	  (when (ext:probe-directory directory-form)
+	    directory-form))))
+
+  #-(or sbcl cmu lispworks openmcl allegro clisp)
+  (error "list-directory not implemented"))
+
+(defun pathname-as-file (name)
+  (let ((pathname (pathname name)))
+    (when (wild-pathname-p pathhname)
+      (error "Can't
+ reliably convert wild pathnames."))
+    (if (directory-pathname-p name)
+	(let* ((directory (pathname-directory pathname))
+	       (name-and-type (pathname (first (last directory)))))
+	  (make-pathname
+	   :directory (butlast directory)
+	   :name (pathname-name name-and-type)
+	   :type (pathname-type name-and-type)
+	   :defaults pathname))
+	pathname)))
+  
+  
