@@ -82,7 +82,7 @@
 
 (defun pathname-as-file (name)
   (let ((pathname (pathname name)))
-    (when (wild-pathname-p pathhname)
+    (when (wild-pathname-p pathname)
       (error "Can't
  reliably convert wild pathnames."))
     (if (directory-pathname-p name)
@@ -94,5 +94,16 @@
 	   :type (pathname-type name-and-type)
 	   :defaults pathname))
 	pathname)))
-  
+
+(defun walk-directory (dirname fn &key directories (test (constantly t)))
+  "Run a desired function in all subdirectories and files of a directory"
+  (labels
+      ((walk (name)
+	 (cond
+	   ((directory-pathname-p name)
+	    (when (and directories (funcall test name))
+	      (funcall fn name))
+	    (dolist (x (list-directory name)) (walk x)))
+	   ((funcall test name) (funcall fn name)))))
+    (walk (pathname-as-directory dirname))))
   
