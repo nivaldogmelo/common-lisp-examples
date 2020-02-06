@@ -1,0 +1,7 @@
+(defun binomial-coefficient (n k)
+  (if (or (= n 0) (= n k))
+      (return-from binomial-coefficient 1)
+      (if (> k 0)
+          (+ (binomial-coefficient (- n 1) k)
+             (binomial-coefficient (- n 1) (- k 1)))
+          (binomial-coefficient (- n 1) k))))
